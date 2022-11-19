@@ -1,8 +1,6 @@
 include .env
 export $(shell sed 's/=.*//' .env)
 
-TERRAFORM_DIR := ./terraform
-
 
 tf-plan:
 	$(call terraform,plan)

@@ -26,6 +26,7 @@ for instance in "$MASTER_INSTANCES"; do
     $KUBECONFIG_DIR/admin.kubeconfig \
     $KUBECONFIG_DIR/kube-controller-manager.kubeconfig \
     $KUBECONFIG_DIR/kube-scheduler.kubeconfig \
+    $BASEDIR/../encryption-config.yml \
     $instance:~/
 done
 

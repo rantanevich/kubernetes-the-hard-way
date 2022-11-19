@@ -7,3 +7,5 @@
 # PKI
 *.pem
 *.csr
+
+.env

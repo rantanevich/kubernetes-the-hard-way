@@ -1,8 +1,5 @@
 #!/bin/sh
 
-BASEDIR=$(dirname "$0")
-
-
 tf_output() {
   terraform -chdir=$BASEDIR/../terraform output -json $1 | jq -r "$2"
 }
@@ -21,6 +18,9 @@ gencert() {
   | cfssljson -bare $BASEDIR/$name
 }
 
+
+BASEDIR=$(dirname "$0")
+
 API_IPV4=$(tf_output api_ipv4 '.')
 MASTER_NODES=$(tf_output masters_ipv4 '. | length')
 WORKER_NODES=$(tf_output workers_ipv4 '. | length')
@@ -35,6 +35,5 @@ gencert service-account
 gencert kubernetes 10.32.0.1,$(tf_output masters_ipv4 '. | join(",")'),$API_IPV4,127.0.0.1,$(tf_output masters_hostname '. | join(",")')
 
 for i in $(seq 0 $((WORKER_NODES-1))); do
-  internal_ipv4=$(tf_output workers_ipv4 ".[$i]")
-  gencert worker-$i worker-$i,$internal_ipv4
+  gencert $(tf_output workers_hostname ".[$1]") $(tf_output "" "[.masters_hostname.value[$i], .masters_ipv4.value[$i]] | join(\",\")")
 done

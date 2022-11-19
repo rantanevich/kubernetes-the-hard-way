@@ -13,6 +13,9 @@ tf-apply:
 pki-gen:
 	./pki/generate.sh
 
+kubeconfig-gen:
+	./kubeconfig/generate.sh
+
 upload:
 	./scripts/upload-files.sh $$GOOGLE_PROJECT
 

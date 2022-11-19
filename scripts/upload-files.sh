@@ -1,5 +1,4 @@
 #!/bin/sh
-set -xe
 
 tf_output() {
   terraform -chdir=$BASEDIR/../terraform output -json $1 | jq -r "$2"
@@ -8,6 +7,7 @@ tf_output() {
 
 BASEDIR=$(dirname "$0")
 PKI_DIR=$BASEDIR/../pki
+KUBECONFIG_DIR=$BASEDIR/../kubeconfig
 
 GOOGLE_PROJECT=$1
 
@@ -23,6 +23,9 @@ for instance in "$MASTER_INSTANCES"; do
     $PKI_DIR/kubernetes-key.pem \
     $PKI_DIR/service-account.pem \
     $PKI_DIR/service-account-key.pem \
+    $KUBECONFIG_DIR/admin.kubeconfig \
+    $KUBECONFIG_DIR/kube-controller-manager.kubeconfig \
+    $KUBECONFIG_DIR/kube-scheduler.kubeconfig \
     $instance:~/
 done
 
@@ -32,5 +35,7 @@ for instance in "$WORKER_INSTANCES"; do
     $PKI_DIR/ca.pem \
     $PKI_DIR/$instance.pem \
     $PKI_DIR/$instance-key.pem \
+    $KUBECONFIG_DIR/$instance.kubeconfig \
+    $KUBECONFIG_DIR/kube-proxy.kubeconfig \
     $instance:~/
 done

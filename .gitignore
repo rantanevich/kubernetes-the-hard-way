@@ -7,5 +7,6 @@
 # PKI
 *.pem
 *.csr
+*.kubeconfig
 
 .env

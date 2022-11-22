@@ -28,11 +28,12 @@ for instance in $MASTER_INSTANCES; do
     $BASEDIR/../encryption-config.yml \
     $BASEDIR/../etcd-install.sh \
     $BASEDIR/../control-plane-install.sh \
+    $BASEDIR/rbac-kubelet.sh \
     $instance:~/
 
   gcloud compute ssh \
     --project=$GOOGLE_PROJECT \
-    --command 'chmod +x ~/etcd-install.sh ~/control-plane-install.sh' \
+    --command 'chmod +x ~/*.sh' \
     $instance
 done
 

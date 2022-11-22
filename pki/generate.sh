@@ -25,7 +25,7 @@ API_IPV4=$(tf_output api_ipv4 '.')
 MASTER_NODES=$(tf_output masters_ipv4 '. | length')
 WORKER_NODES=$(tf_output workers_ipv4 '. | length')
 
-cfssl gencert -initca $BASEDIR/ca-csr.json | cfssljson -bare ca
+cfssl gencert -initca $BASEDIR/ca-csr.json | cfssljson -bare $BASEDIR/ca
 
 gencert admin
 gencert kube-controller-manager

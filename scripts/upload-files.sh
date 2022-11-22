@@ -27,11 +27,12 @@ for instance in $MASTER_INSTANCES; do
     $KUBECONFIG_DIR/kube-scheduler.kubeconfig \
     $BASEDIR/../encryption-config.yml \
     $BASEDIR/../etcd-install.sh \
+    $BASEDIR/../control-plane-install.sh \
     $instance:~/
 
   gcloud compute ssh \
     --project=$GOOGLE_PROJECT \
-    --command 'chmod +x ~/etcd-install.sh' \
+    --command 'chmod +x ~/etcd-install.sh ~/control-plane-install.sh' \
     $instance
 done
 

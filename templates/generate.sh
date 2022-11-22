@@ -17,3 +17,9 @@ envsubst '$ETCD_VERSION,$ETCD_NODES' > $BASEDIR/../etcd-install.sh < $BASEDIR/et
 
 export ENCRYPTION_KEY=$(head -c 32 /dev/urandom | base64)
 envsubst '$ENCRYPTION_KEY' > $BASEDIR/../encryption-config.yml < $BASEDIR/encryption-config.tmpl
+
+export ETCD_SERVERS=$(tf_output 'masters_ipv4' '. | map("https://"+.+":2379") | join(",")')
+export KUBERNETES_API_IPV4=$(tf_output 'api_ipv4' '.')
+export API_SERVER_COUNT=$(tf_output 'masters_ipv4' '. | length')
+export KUBERNETES_VERSION=${KUBERNETES_VERSION:-1.21.14}
+envsubst '$KUBERNETES_VERSION,$KUBERNETES_API_IPV4,$ETCD_SERVERS,$API_SERVER_COUNT' > $BASEDIR/../control-plane-install.sh < $BASEDIR/control-plane-install.tmpl

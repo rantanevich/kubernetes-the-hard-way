@@ -1,5 +1,4 @@
 #!/bin/sh
-
 tf_output() {
   terraform -chdir=$BASEDIR/../terraform output -json $1 | jq -r "$2"
 }
@@ -14,7 +13,7 @@ GOOGLE_PROJECT=$1
 MASTER_INSTANCES=$(tf_output masters_hostname '. | join(" ")')
 WORKER_INSTANCES=$(tf_output workers_hostname '. | join(" ")')
 
-for instance in "$MASTER_INSTANCES"; do
+for instance in $MASTER_INSTANCES; do
   gcloud compute scp \
     --project=$GOOGLE_PROJECT \
     $PKI_DIR/ca.pem \
@@ -27,10 +26,16 @@ for instance in "$MASTER_INSTANCES"; do
     $KUBECONFIG_DIR/kube-controller-manager.kubeconfig \
     $KUBECONFIG_DIR/kube-scheduler.kubeconfig \
     $BASEDIR/../encryption-config.yml \
+    $BASEDIR/../etcd-install.sh \
     $instance:~/
+
+  gcloud compute ssh \
+    --project=$GOOGLE_PROJECT \
+    --command 'chmod +x ~/etcd-install.sh' \
+    $instance
 done
 
-for instance in "$WORKER_INSTANCES"; do
+for instance in $WORKER_INSTANCES; do
   gcloud compute scp \
     --project=$GOOGLE_PROJECT \
     $PKI_DIR/ca.pem \

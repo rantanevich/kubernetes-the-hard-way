@@ -40,6 +40,6 @@ genconfig 127.0.0.1 kube-controller-manager system:kube-controller-manager
 genconfig 127.0.0.1 kube-scheduler system:kube-scheduler
 genconfig 127.0.0.1 admin admin
 
-for instance in "$WORKER_INSTANCES"; do
+for instance in $WORKER_INSTANCES; do
   genconfig $API_IPV4 $instance system:node:$instance
 done

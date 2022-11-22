@@ -35,5 +35,5 @@ gencert service-account
 gencert kubernetes 10.32.0.1,$(tf_output masters_ipv4 '. | join(",")'),$API_IPV4,127.0.0.1,$(tf_output masters_hostname '. | join(",")')
 
 for i in $(seq 0 $((WORKER_NODES-1))); do
-  gencert $(tf_output workers_hostname ".[$1]") $(tf_output "" "[.masters_hostname.value[$i], .masters_ipv4.value[$i]] | join(\",\")")
+  gencert $(tf_output workers_hostname ".[$i]") $(tf_output "" "[.masters_hostname.value[$i], .masters_ipv4.value[$i]] | join(\",\")")
 done

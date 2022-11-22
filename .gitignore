@@ -10,5 +10,6 @@
 
 *.kubeconfig
 encryption-config.yml
+etcd-install.sh
 
 .env

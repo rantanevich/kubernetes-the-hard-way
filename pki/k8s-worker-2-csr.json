@@ -1,5 +1,5 @@
 {
-  "CN": "system:node:worker-1",
+  "CN": "system:node:k8s-worker-2",
   "key": {
     "algo": "ecdsa",
     "size": 384

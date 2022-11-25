@@ -12,5 +12,6 @@
 encryption-config.yml
 etcd-install.sh
 control-plane-install.sh
+worker-install.sh
 
 .env

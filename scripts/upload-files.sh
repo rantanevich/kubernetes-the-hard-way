@@ -45,5 +45,11 @@ for instance in $WORKER_INSTANCES; do
     $PKI_DIR/$instance-key.pem \
     $KUBECONFIG_DIR/$instance.kubeconfig \
     $KUBECONFIG_DIR/kube-proxy.kubeconfig \
+    $BASEDIR/../worker-install.sh \
     $instance:~/
+
+  gcloud compute ssh \
+    --project=$GOOGLE_PROJECT \
+    --command 'chmod +x ~/*.sh' \
+    $instance
 done

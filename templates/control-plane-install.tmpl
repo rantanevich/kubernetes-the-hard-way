@@ -1,7 +1,12 @@
 #!/bin/sh
 curl -fsSLO "https://dl.k8s.io/v$KUBERNETES_VERSION/kubernetes-server-linux-amd64.tar.gz"
 tar -xf kubernetes-server-linux-amd64.tar.gz
-sudo install ./kubernetes/server/bin/{kube-apiserver,kube-controller-manager,kube-scheduler,kubectl} /usr/local/bin
+sudo install \
+  ./kubernetes/server/bin/kube-apiserver \
+  ./kubernetes/server/bin/kube-controller-manager \
+  ./kubernetes/server/bin/kube-scheduler \
+  ./kubernetes/server/bin/kubectl \
+  /usr/local/bin
 
 sudo mkdir -p /etc/kubernetes/config /var/lib/kubernetes
 

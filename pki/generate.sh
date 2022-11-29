@@ -28,6 +28,7 @@ WORKER_NODES=$(tf_output workers_ipv4 '. | length')
 cfssl gencert -initca $BASEDIR/ca-csr.json | cfssljson -bare $BASEDIR/ca
 
 gencert admin
+gencert remote
 gencert kube-controller-manager
 gencert kube-proxy
 gencert kube-scheduler

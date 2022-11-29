@@ -39,6 +39,7 @@ genconfig $API_IPV4 kube-proxy system:kube-proxy
 genconfig 127.0.0.1 kube-controller-manager system:kube-controller-manager
 genconfig 127.0.0.1 kube-scheduler system:kube-scheduler
 genconfig 127.0.0.1 admin admin
+genconfig $API_IPV4 remote remote
 
 for instance in $WORKER_INSTANCES; do
   genconfig $API_IPV4 $instance system:node:$instance

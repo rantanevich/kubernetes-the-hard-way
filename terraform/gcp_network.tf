@@ -30,7 +30,7 @@ resource "google_compute_route" "kubernetes" {
 
   name        = format("worker-%d-pods", count.index)
   dest_range  = format(var.pods_network_template, count.index)
-  next_hop_ip = format(var.worker_network_ip_template, count.index)
+  next_hop_ip = google_compute_instance.worker[count.index].network_interface[0].network_ip
   network     = google_compute_network.main.name
   priority    = 100
 }

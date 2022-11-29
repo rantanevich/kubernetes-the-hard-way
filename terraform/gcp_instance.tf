@@ -1,9 +1,10 @@
 resource "google_compute_instance" "master" {
   count = var.master_nodes
 
-  name         = format("%s-master-%d", var.name_prefix, count.index)
-  machine_type = var.machine_type
-  zone         = data.google_compute_zones.available.names[0]
+  name           = format("%s-master-%d", var.name_prefix, count.index)
+  machine_type   = var.machine_type
+  zone           = data.google_compute_zones.available.names[0]
+  can_ip_forward = true
 
   tags = [var.name_prefix, "kubernetes", "master"]
 
@@ -33,9 +34,10 @@ resource "google_compute_instance" "master" {
 resource "google_compute_instance" "worker" {
   count = var.worker_nodes
 
-  name         = format("%s-worker-%d", var.name_prefix, count.index)
-  machine_type = var.machine_type
-  zone         = data.google_compute_zones.available.names[0]
+  name           = format("%s-worker-%d", var.name_prefix, count.index)
+  machine_type   = var.machine_type
+  zone           = data.google_compute_zones.available.names[0]
+  can_ip_forward = true
 
   tags = [var.name_prefix, "kubernetes", "worker"]
 

@@ -27,6 +27,13 @@ rules:
   - nodes
   verbs:
   - get
+- apiGroups:
+  - discovery.k8s.io
+  resources:
+  - endpointslices
+  verbs:
+  - list
+  - watch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -53,18 +60,18 @@ metadata:
 data:
   Corefile: |
     .:53 {
-        errors
-        health
-        ready
-        kubernetes cluster.local in-addr.arpa ip6.arpa {
-          pods insecure
-          fallthrough in-addr.arpa ip6.arpa
-        }
-        prometheus :9153
-        cache 30
-        loop
-        reload
-        loadbalance
+      errors
+      health
+      ready
+      kubernetes cluster.local in-addr.arpa ip6.arpa {
+        pods insecure
+        fallthrough in-addr.arpa ip6.arpa
+      }
+      prometheus :9153
+      cache 30
+      loop
+      reload
+      loadbalance
     }
 ---
 apiVersion: apps/v1
@@ -74,7 +81,7 @@ metadata:
   namespace: kube-system
   labels:
     k8s-app: kube-dns
-    kubernetes.io/name: "CoreDNS"
+    kubernetes.io/name: CoreDNS
 spec:
   replicas: 2
   strategy:
@@ -92,17 +99,15 @@ spec:
       priorityClassName: system-cluster-critical
       serviceAccountName: coredns
       tolerations:
-        - key: "CriticalAddonsOnly"
-          operator: "Exists"
+      - key: CriticalAddonsOnly
+        operator: Exists
       nodeSelector:
         beta.kubernetes.io/os: linux
       containers:
       - name: coredns
-        image: coredns/coredns:1.7.0
+        image: coredns/coredns:1.8.3
         imagePullPolicy: IfNotPresent
         resources:
-          limits:
-            memory: 170Mi
           requests:
             cpu: 100m
             memory: 70Mi
@@ -145,12 +150,12 @@ spec:
             scheme: HTTP
       dnsPolicy: Default
       volumes:
-        - name: config-volume
-          configMap:
-            name: coredns
-            items:
-            - key: Corefile
-              path: Corefile
+      - name: config-volume
+        configMap:
+          name: coredns
+          items:
+          - key: Corefile
+            path: Corefile
 ---
 apiVersion: v1
 kind: Service
@@ -163,7 +168,7 @@ metadata:
   labels:
     k8s-app: kube-dns
     kubernetes.io/cluster-service: "true"
-    kubernetes.io/name: "CoreDNS"
+    kubernetes.io/name: CoreDNS
 spec:
   selector:
     k8s-app: kube-dns

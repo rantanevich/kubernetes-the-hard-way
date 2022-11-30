@@ -77,13 +77,14 @@ cat <<EOF | sudo tee /etc/cni/net.d/99-loopback.conf
 EOF
 
 cat << EOF | sudo tee /etc/containerd/config.toml
-[plugins]
-  [plugins.cri.containerd]
-    snapshotter = "overlayfs"
-    [plugins.cri.containerd.default_runtime]
-      runtime_type = "io.containerd.runtime.v1.linux"
-      runtime_engine = "/usr/local/bin/runc"
-      runtime_root = ""
+[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
+  [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
+    SystemdCgroup = true
+EOF
+
+cat <<EOF | sudo tee /etc/crictl.yaml
+runtime-endpoint: unix:///var/run/containerd/containerd.sock
+image-endpoint: unix:///var/run/containerd/containerd.sock
 EOF
 
 cat <<EOF | sudo tee /etc/systemd/system/containerd.service
@@ -124,7 +125,6 @@ clusterDomain: cluster.local
 clusterDNS:
 - 10.32.0.10
 podCIDR: $PODS_NETWORK
-resolvConf: /run/systemd/resolve/resolv.conf
 runtimeRequestTimeout: 15m
 tlsCertFile: /var/lib/kubelet/$HOSTNAME.pem
 tlsPrivateKeyFile: /var/lib/kubelet/$HOSTNAME-key.pem
@@ -160,7 +160,7 @@ apiVersion: kubeproxy.config.k8s.io/v1alpha1
 clientConnection:
   kubeconfig: /var/lib/kube-proxy/kubeconfig
 mode: iptables
-clusterCIDR: 10.200.0.0/16
+clusterCIDR: 192.168.0.0/16
 EOF
 
 cat <<EOF | sudo tee /etc/systemd/system/kube-proxy.service

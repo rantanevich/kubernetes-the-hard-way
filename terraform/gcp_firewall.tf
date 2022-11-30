@@ -21,8 +21,8 @@ resource "google_compute_firewall" "external" {
   )
 }
 
-resource "google_compute_firewall" "kubernetes_internal" {
-  name    = format("%s-kubernetes-internal", var.name_prefix)
+resource "google_compute_firewall" "internal" {
+  name    = format("%s-internal", var.name_prefix)
   network = google_compute_network.main.name
 
   dynamic "allow" {

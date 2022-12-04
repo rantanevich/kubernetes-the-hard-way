@@ -6,7 +6,7 @@ resource "google_compute_instance" "master" {
   zone           = data.google_compute_zones.available.names[0]
   can_ip_forward = true
 
-  tags = [var.name_prefix, "kubernetes", "master"]
+  tags = ["kubernetes", format("%s-master", var.name_prefix)]
 
   boot_disk {
     auto_delete = true
@@ -39,7 +39,7 @@ resource "google_compute_instance" "worker" {
   zone           = data.google_compute_zones.available.names[0]
   can_ip_forward = true
 
-  tags = [var.name_prefix, "kubernetes", "worker"]
+  tags = ["kubernetes", format("%s-worker", var.name_prefix)]
 
   boot_disk {
     auto_delete = true
@@ -54,6 +54,10 @@ resource "google_compute_instance" "worker" {
   network_interface {
     subnetwork = google_compute_subnetwork.main.name
     network_ip = format(var.worker_network_ip_template, count.index)
+
+    access_config {
+      nat_ip = google_compute_global_address.worker[count.index].address
+    }
   }
 
   service_account {

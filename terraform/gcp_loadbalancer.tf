@@ -1,7 +1,3 @@
-resource "google_compute_global_address" "kube_api" {
-  name = format("%s-kube-api", var.name_prefix)
-}
-
 resource "google_compute_global_forwarding_rule" "kube_api" {
   name                  = format("%s-kube-api", var.name_prefix)
   ip_protocol           = "TCP"

@@ -56,7 +56,7 @@ resource "google_compute_instance" "worker" {
     network_ip = format(var.worker_network_ip_template, count.index)
 
     access_config {
-      nat_ip = google_compute_global_address.worker[count.index].address
+      nat_ip = google_compute_address.worker[count.index].address
     }
   }
 

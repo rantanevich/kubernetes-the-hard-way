@@ -29,6 +29,7 @@ render:
 smoke-test:
 	./scripts/smoke-test.sh $$GOOGLE_PROJECT
 
+
 define terraform
 	terraform -chdir=./terraform $(1) \
 		-var google_project=$$GOOGLE_PROJECT \

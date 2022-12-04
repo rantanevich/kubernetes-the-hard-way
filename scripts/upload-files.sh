@@ -15,6 +15,7 @@ WORKER_INSTANCES=$(tf_output workers_hostname '. | join(" ")')
 
 for instance in $MASTER_INSTANCES; do
   gcloud compute scp \
+    --tunnel-through-iap \
     --project=$GOOGLE_PROJECT \
     $PKI_DIR/ca.pem \
     $PKI_DIR/ca-key.pem \
@@ -32,6 +33,7 @@ for instance in $MASTER_INSTANCES; do
     $instance:~/
 
   gcloud compute ssh \
+    --tunnel-through-iap \
     --project=$GOOGLE_PROJECT \
     --command 'chmod +x ~/*.sh' \
     $instance
@@ -39,6 +41,7 @@ done
 
 for instance in $WORKER_INSTANCES; do
   gcloud compute scp \
+    --tunnel-through-iap \
     --project=$GOOGLE_PROJECT \
     $PKI_DIR/ca.pem \
     $PKI_DIR/$instance.pem \
@@ -49,6 +52,7 @@ for instance in $WORKER_INSTANCES; do
     $instance:~/
 
   gcloud compute ssh \
+    --tunnel-through-iap \
     --project=$GOOGLE_PROJECT \
     --command 'chmod +x ~/*.sh' \
     $instance

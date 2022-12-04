@@ -21,11 +21,13 @@ upload:
 	./scripts/upload-files.sh $$GOOGLE_PROJECT
 
 ssh:
-	gcloud compute ssh --project $$GOOGLE_PROJECT $$NAME_PREFIX-$(host)
+	gcloud compute ssh --tunnel-through-iap --project $$GOOGLE_PROJECT $$NAME_PREFIX-$(host)
 
 render:
 	./templates/generate.sh
 
+smoke-test:
+	./scripts/smoke-test.sh $$GOOGLE_PROJECT
 
 define terraform
 	terraform -chdir=./terraform $(1) \

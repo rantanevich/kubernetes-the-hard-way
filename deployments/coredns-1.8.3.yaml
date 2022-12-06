@@ -22,12 +22,6 @@ rules:
   - list
   - watch
 - apiGroups:
-  - ""
-  resources:
-  - nodes
-  verbs:
-  - get
-- apiGroups:
   - discovery.k8s.io
   resources:
   - endpointslices
@@ -68,6 +62,7 @@ data:
         fallthrough in-addr.arpa ip6.arpa
       }
       prometheus :9153
+      forward . /etc/resolv.conf
       cache 30
       loop
       reload

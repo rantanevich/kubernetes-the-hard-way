@@ -69,7 +69,7 @@ gcloud compute ssh $(tf_output 'masters_hostname' '.[0]') \
       --cert=/etc/etcd/kubernetes.pem \
       --key=/etc/etcd/kubernetes-key.pem \
       /registry/secrets/default/kubernetes-the-hard-way \
-    | hexdump -C' 2>/dev/null
+    | hexdump -C'
 
 echo
 echo

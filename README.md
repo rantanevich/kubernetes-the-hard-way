@@ -43,3 +43,67 @@ This tutorial assumes you have access to the [Google Cloud Platform](https://clo
 * [Deploying the DNS Cluster Add-on](docs/12-dns-addon.md)
 * [Smoke Test](docs/13-smoke-test.md)
 * [Cleaning Up](docs/14-cleanup.md)
+
+## Cheat sheet
+
+1. Provision infrastructure with Terraform
+
+```sh
+make tf-apply
+```
+
+2. Provision CA and TLS certs
+
+```sh
+make pki-gen
+```
+
+3. Generate Kubernetes configuration files
+
+```sh
+make kubeconfig-gen
+```
+
+4. Prepare shell scripts to install Kubernetes componentes
+
+```sh
+make render
+```
+
+5. Upload CA and TLS certs, shell scripts to the nodes
+
+```sh
+make upload
+```
+
+6. Login on master nodes and run `./etcd-install.sh` to bootstrap ETCD cluster
+
+7. Bootstrap Control Plane components by running `./control-plane-install.sh`
+
+8. Configure RBAC permissions to allow the Kubernetes API Server to access the Kubelet API on each worker node. Just run `./rbac-kubelet.sh`
+
+9. Connect to the worker nodes and execute `./worker-install.sh` to boostrap it.
+
+10. Setup `KUBECONFIG` when you are on the root directory
+
+```sh
+export KUBECONFIG=$(pwd)/kubeconfig/remote.kubeconfig
+```
+
+11. Deploy CoreDNS
+
+```sh
+kubectl apply -f ./deployments/coredns-1.8.3.yaml
+```
+
+12. Run smoke tests
+
+```sh
+make smoke-test
+```
+
+13. Destroy infrastructure
+
+```sh
+make tf-destory
+```
